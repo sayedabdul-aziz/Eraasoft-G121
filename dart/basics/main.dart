@@ -12,7 +12,7 @@ void display(String name, String gender, int age) {
 }
 
 //2) positional params. (ordered , required and optional)
-void display1(String name, String gender, [int age = 20,int? x]) {
+void display1(String name, String gender, [int age = 20, int? x]) {
   print('$name : $gender : $age');
 }
 

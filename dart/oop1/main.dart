@@ -1,16 +1,15 @@
 import 'person.dart';
 
+// Employee (name,year,salary) using constructor..
+
 void main() {
   // create an object
-  Person p1 = Person();
-  p1.name = 'Ali';
-  p1.age = 23;
-  p1.gender = 'Male';
+  Person p1 = Person(name: 'Ahmed', age: 33, gender: 'Male');
   p1.display();
 
-  Person p2 = Person();
-  p2.name = 'Amira';
-  p2.age = 33;
-  p2.gender = 'Female';
+  Person p2 = Person(name: 'Samar', age: 22, gender: 'Female');
   p2.display();
+
+  Person p3 = Person.withoutGender(name: 'Ahmed', age: 22);
+  p3.display();
 }

@@ -1,7 +1,12 @@
+
+enum Gender{
+  Male,
+  Female
+}
 class Person {
   // att.
   String? name;
-  String? gender;
+  Gender? gender;
   int? age;
 
   Person({required this.name, required this.age, required this.gender});

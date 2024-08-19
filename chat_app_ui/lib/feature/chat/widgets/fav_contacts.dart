@@ -1,3 +1,4 @@
+import 'package:chat_app_ui/core/models/user_model.dart';
 import 'package:flutter/material.dart';
 
 class FavContactsWidget extends StatelessWidget {
@@ -29,18 +30,19 @@ class FavContactsWidget extends StatelessWidget {
             child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return const Column(
+                  return Column(
                     children: [
                       CircleAvatar(
                         radius: 30,
                         backgroundImage: NetworkImage(
-                            'https://images.unsplash.com/photo-1614289371518-722f2615943d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'),
+                          usersList[index].image ?? '',
+                        ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
-                      Text('Ahmed Ali',
-                          style: TextStyle(color: Colors.white)),
+                      Text(usersList[index].name?.split(' ').first ?? '',
+                          style: const TextStyle(color: Colors.white)),
                     ],
                   );
                 },
@@ -49,7 +51,7 @@ class FavContactsWidget extends StatelessWidget {
                     width: 10,
                   );
                 },
-                itemCount: 15),
+                itemCount: usersList.length),
           ),
         ],
       ),

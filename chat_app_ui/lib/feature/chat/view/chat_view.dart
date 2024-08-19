@@ -1,5 +1,6 @@
-import 'package:chat_app_ui/colors.dart';
-import 'package:chat_app_ui/widgets/fav_contacts.dart';
+import 'package:chat_app_ui/core/colors.dart';
+import 'package:chat_app_ui/feature/chat/widgets/chat_list_widget.dart';
+import 'package:chat_app_ui/feature/chat/widgets/fav_contacts.dart';
 import 'package:flutter/material.dart';
 
 class ChatView extends StatelessWidget {
@@ -28,18 +29,13 @@ class ChatView extends StatelessWidget {
               ))
         ],
       ),
-      body: Column(
+      body: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // favorite chats
-          const FavContactsWidget(),
-
+          FavContactsWidget(),
           // chats
-          Expanded(
-            child: Container(
-              color: Colors.white,
-            ),
-          )
+          ChatListWidget()
         ],
       ),
     );

@@ -28,8 +28,24 @@ class _ProfileViewState extends State<ProfileView> {
 
   @override
   Widget build(BuildContext context) {
+    bool mode =
+        AppLocalStorage.getCachedData(AppLocalStorage.kIsDarkMode) ?? false;
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            // make dark and light button
+            IconButton(
+              onPressed: () {
+                AppLocalStorage.cacheData(AppLocalStorage.kIsDarkMode, !mode);
+                setState(() {});
+              },
+              icon: Icon(
+                mode ? Icons.light_mode : Icons.dark_mode,
+                color: AppColors.primaryColor,
+              ),
+            ),
+          ],
+        ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(20),
@@ -54,15 +70,17 @@ class _ProfileViewState extends State<ProfileView> {
                             onTap: () {
                               showModalBottomSheet(
                                   context: context,
-                                  backgroundColor: AppColors.whiteColor,
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   builder: (context) {
                                     return Container(
                                       padding: const EdgeInsets.all(20),
                                       width: double.infinity,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                        color: AppColors.whiteColor,
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -89,10 +107,14 @@ class _ProfileViewState extends State<ProfileView> {
                             },
                             child: Container(
                                 padding: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: AppColors.whiteColor),
-                                child: const Icon(Icons.camera_alt_rounded)),
+                                    color: Theme.of(context)
+                                        .scaffoldBackgroundColor),
+                                child: const Icon(
+                                  Icons.camera_alt_rounded,
+                                  color: AppColors.primaryColor,
+                                )),
                           )),
                     ],
                   ),
@@ -104,7 +126,8 @@ class _ProfileViewState extends State<ProfileView> {
                   Row(children: [
                     Text(
                       name,
-                      style: getTitleTextStyle(color: AppColors.primaryColor),
+                      style: getTitleTextStyle(context,
+                          color: AppColors.primaryColor),
                     ),
                     const Spacer(),
                     IconButton.outlined(

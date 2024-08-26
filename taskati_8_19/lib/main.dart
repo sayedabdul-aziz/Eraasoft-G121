@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:taskati_8_19/core/models/task_model.dart';
 import 'package:taskati_8_19/core/services/local_storage.dart';
-import 'package:taskati_8_19/core/utils/colors.dart';
-import 'package:taskati_8_19/core/utils/text_style.dart';
+import 'package:taskati_8_19/core/utils/themes.dart';
 import 'package:taskati_8_19/feature/intro/splash_view.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
+  Hive.registerAdapter(TaskModelAdapter());
   await Hive.openBox('userBox');
+  await Hive.openBox<TaskModel>('taskBox');
   AppLocalStorage.init();
   runApp(const MainApp());
 }
@@ -17,33 +19,18 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          inputDecorationTheme: InputDecorationTheme(
-        hintStyle: getSmallTextStyle(),
-        enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: AppColors.primaryColor,
-            )),
-        focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: AppColors.primaryColor,
-            )),
-        errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: AppColors.redColor,
-            )),
-        focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(
-              color: AppColors.redColor,
-            )),
-      )),
-      home: const SplashView(),
-    );
+    return ValueListenableBuilder(
+        valueListenable: AppLocalStorage.userBox.listenable(),
+        builder: (context, userBox, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            themeMode: userBox.get(AppLocalStorage.kIsDarkMode)
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            darkTheme: AppTheme.darkTheme,
+            theme: AppTheme.lightTheme,
+            home: const SplashView(),
+          );
+        });
   }
 }

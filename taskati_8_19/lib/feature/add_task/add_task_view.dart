@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
+import 'package:taskati_8_19/core/functions/navigation.dart';
+import 'package:taskati_8_19/core/models/task_model.dart';
+import 'package:taskati_8_19/core/services/local_storage.dart';
 import 'package:taskati_8_19/core/utils/colors.dart';
 import 'package:taskati_8_19/core/utils/text_style.dart';
 import 'package:taskati_8_19/core/widgets/custom_button.dart';
+import 'package:taskati_8_19/feature/home/page/home_view.dart';
 
 class AddTaskView extends StatefulWidget {
   const AddTaskView({super.key});
@@ -18,9 +22,13 @@ class _AddTaskViewState extends State<AddTaskView> {
   String startTime = DateFormat("hh:mm a").format(DateTime.now());
   String endTime = DateFormat("hh:mm a")
       .format(DateTime.now().add(const Duration(hours: 1)));
+
+  var titleController = TextEditingController();
+  var noteController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
@@ -33,7 +41,7 @@ class _AddTaskViewState extends State<AddTaskView> {
           ),
           title: Text(
             'Add Task',
-            style: getTitleTextStyle(color: AppColors.primaryColor),
+            style: getTitleTextStyle(context, color: AppColors.primaryColor),
           ),
           centerTitle: true,
         ),
@@ -43,10 +51,11 @@ class _AddTaskViewState extends State<AddTaskView> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               'Title',
-              style: getTitleTextStyle(fontSize: 14),
+              style: getTitleTextStyle(context, fontSize: 14),
             ),
             const Gap(8),
             TextFormField(
+              controller: titleController,
               decoration: const InputDecoration(
                 hintText: 'Ex: Go to School',
               ),
@@ -54,10 +63,11 @@ class _AddTaskViewState extends State<AddTaskView> {
             const Gap(10),
             Text(
               'Note',
-              style: getTitleTextStyle(fontSize: 14),
+              style: getTitleTextStyle(context, fontSize: 14),
             ),
             const Gap(8),
             TextFormField(
+              controller: noteController,
               maxLines: 4,
               decoration: const InputDecoration(
                 hintText: 'Ex: Go to School',
@@ -66,7 +76,7 @@ class _AddTaskViewState extends State<AddTaskView> {
             const Gap(10),
             Text(
               'Date',
-              style: getTitleTextStyle(fontSize: 14),
+              style: getTitleTextStyle(context, fontSize: 14),
             ),
             const Gap(8),
             TextFormField(
@@ -87,7 +97,9 @@ class _AddTaskViewState extends State<AddTaskView> {
               readOnly: true,
               decoration: InputDecoration(
                   hintText: taskDate,
-                  hintStyle: getBodyTextStyle(),
+                  hintStyle: getBodyTextStyle(
+                    context,
+                  ),
                   suffixIcon: const Icon(
                     Icons.calendar_month_rounded,
                     color: AppColors.primaryColor,
@@ -99,14 +111,14 @@ class _AddTaskViewState extends State<AddTaskView> {
                 Expanded(
                   child: Text(
                     'Start Time',
-                    style: getTitleTextStyle(fontSize: 14),
+                    style: getTitleTextStyle(context, fontSize: 14),
                   ),
                 ),
                 const Gap(10),
                 Expanded(
                   child: Text(
                     'End Time',
-                    style: getTitleTextStyle(fontSize: 14),
+                    style: getTitleTextStyle(context, fontSize: 14),
                   ),
                 ),
               ],
@@ -130,7 +142,9 @@ class _AddTaskViewState extends State<AddTaskView> {
                     readOnly: true,
                     decoration: InputDecoration(
                         hintText: startTime,
-                        hintStyle: getBodyTextStyle(),
+                        hintStyle: getBodyTextStyle(
+                          context,
+                        ),
                         suffixIcon: const Icon(
                           Icons.watch_later_outlined,
                           color: AppColors.primaryColor,
@@ -154,7 +168,9 @@ class _AddTaskViewState extends State<AddTaskView> {
                     readOnly: true,
                     decoration: InputDecoration(
                         hintText: endTime,
-                        hintStyle: getBodyTextStyle(),
+                        hintStyle: getBodyTextStyle(
+                          context,
+                        ),
                         suffixIcon: const Icon(
                           Icons.watch_later_outlined,
                           color: AppColors.primaryColor,
@@ -196,7 +212,24 @@ class _AddTaskViewState extends State<AddTaskView> {
                     }),
                   ),
                 ),
-                CustomButton(width: 150, text: 'Create Task', onPressed: () {})
+                CustomButton(
+                    width: 150,
+                    text: 'Create Task',
+                    onPressed: () {
+                      String id = '${titleController.text}-${DateTime.now()}';
+                      AppLocalStorage.cacheTaskData(
+                          id,
+                          TaskModel(
+                              id: id,
+                              title: titleController.text,
+                              description: noteController.text,
+                              date: taskDate,
+                              startTime: startTime,
+                              endTime: endTime,
+                              color: colorIndex,
+                              isCompleted: false));
+                      pushWithReplacement(context, const HomeView());
+                    })
               ],
             )
           ]),

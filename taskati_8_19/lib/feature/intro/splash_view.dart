@@ -36,8 +36,8 @@ class _SplashViewState extends State<SplashView> {
           Lottie.asset('assets/logo.json'),
           Text(
             'Taskati',
-            style:
-                getTitleTextStyle(fontSize: 24, color: AppColors.primaryColor),
+            style: getTitleTextStyle(context,
+                fontSize: 24, color: AppColors.primaryColor),
           ),
           // const SizedBox(
           //   height: 10,

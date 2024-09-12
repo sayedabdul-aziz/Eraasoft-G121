@@ -1,4 +1,4 @@
-import 'package:counter_app/counter_screen.dart';
+import 'package:counter_app/counter_with_cubit/counter_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,8 +10,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-      home: CounterScreen(),
+    return const MaterialApp(
+      home: CounterView(),
     );
   }
 }

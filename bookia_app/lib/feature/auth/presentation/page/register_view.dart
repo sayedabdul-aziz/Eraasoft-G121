@@ -2,12 +2,14 @@ import 'package:bookia_app/core/functions/dialogs.dart';
 import 'package:bookia_app/core/functions/navigation.dart';
 import 'package:bookia_app/core/utils/colors.dart';
 import 'package:bookia_app/core/utils/text_style.dart';
+import 'package:bookia_app/core/widgets/back_card_widget.dart';
 import 'package:bookia_app/core/widgets/custom_button.dart';
 import 'package:bookia_app/core/widgets/nav_bar_widget.dart';
 import 'package:bookia_app/feature/auth/data/models/request/register_params.dart';
 import 'package:bookia_app/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:bookia_app/feature/auth/presentation/bloc/auth_event.dart';
 import 'package:bookia_app/feature/auth/presentation/bloc/auth_state.dart';
+import 'package:bookia_app/feature/auth/presentation/page/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -44,27 +46,8 @@ class _RegisterViewState extends State<RegisterView> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    width: 41,
-                    height: 41,
-                    padding: const EdgeInsets.only(right: 3),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: AppColors.whiteColor,
-                      border: Border.all(color: AppColors.borderColor),
-                    ),
-                    child: const Icon(
-                      Icons.arrow_back_ios_new_rounded,
-                    ),
-                  ),
-                )
-              ],
+            title: const Row(
+              children: [BackCardWidget()],
             ),
           ),
           body: Padding(
@@ -180,7 +163,9 @@ class _RegisterViewState extends State<RegisterView> {
                         style: getSmallTextStyle(context),
                       ),
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            pushReplacement(context, const LoginView());
+                          },
                           child: Text(
                             'Login Now',
                             style: getSmallTextStyle(context,

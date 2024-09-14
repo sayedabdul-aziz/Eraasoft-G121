@@ -7,13 +7,18 @@ environment:
   sdk: ">=3.4.3 <4.0.0"
 
 dependencies:
+  cached_network_image: ^3.4.1
   carousel_slider: ^5.0.0
+  dio: ^5.7.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
   flutter_svg: ^2.0.10+1
   gap: ^3.0.1
   http: ^1.2.2
+  lottie: ^3.1.2
+  shared_preferences: ^2.3.2
+  # skeletonizer: ^1.4.2
   smooth_page_indicator: ^1.2.0+3
 
 dev_dependencies:

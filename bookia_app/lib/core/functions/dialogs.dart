@@ -9,6 +9,13 @@ showErrorDialog(BuildContext context, String text) {
   ));
 }
 
+showSuccessDialog(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    backgroundColor: AppColors.primaryColor,
+    content: Text(text),
+  ));
+}
+
 showLoadingDialog(BuildContext context) {
   showDialog(
       context: context,

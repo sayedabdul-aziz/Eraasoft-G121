@@ -1,9 +1,9 @@
 import 'package:bookia_app/core/constants/assets_icons.dart';
 import 'package:bookia_app/core/utils/colors.dart';
-import 'package:bookia_app/feature/cart/page/cart_view.dart';
-import 'package:bookia_app/feature/home/presentation/page/home_view.dart';
+import 'package:bookia_app/feature/home/presentation/page/cart/cart_view.dart';
+import 'package:bookia_app/feature/home/presentation/page/home/page/home_view.dart';
+import 'package:bookia_app/feature/home/presentation/page/wishlist/wishlist_view.dart';
 import 'package:bookia_app/feature/profile/page/profile_view.dart';
-import 'package:bookia_app/feature/wishlist/page/wishlist_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

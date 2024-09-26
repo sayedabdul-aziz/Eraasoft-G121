@@ -6,7 +6,7 @@ TextStyle getHeadlineTextStyle(
   return TextStyle(
     fontSize: fontSize,
     fontWeight: fontWeight,
-    color: color ?? AppColors.primaryColor,
+    color: color ?? AppColors.color1,
   );
 }
 
@@ -17,7 +17,7 @@ TextStyle getTitleStyle(
   return TextStyle(
     fontSize: fontSize,
     fontWeight: fontWeight,
-    color: color ?? AppColors.primaryColor,
+    color: color ?? AppColors.color1,
   );
 }
 
@@ -26,7 +26,7 @@ TextStyle getbodyStyle(
   return TextStyle(
     fontSize: fontSize,
     fontWeight: fontWeight,
-    color: color ?? AppColors.textColor,
+    color: color ?? AppColors.black,
   );
 }
 // small
@@ -36,6 +36,6 @@ TextStyle getSmallStyle(
   return TextStyle(
     fontSize: fontSize,
     fontWeight: fontWeight,
-    color: color ?? AppColors.textColor,
+    color: color ?? AppColors.black,
   );
 }

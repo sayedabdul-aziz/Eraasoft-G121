@@ -2,6 +2,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AppLocalStorage {
   static const String token = "token";
+  static const String isOnboardingShown = "isOnboardingShown";
+  static const String userToken = "userToken";
 
   static late SharedPreferences _sharedPreferences;
 

@@ -15,15 +15,16 @@ class AppThemes {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: AppColors.primaryColor,
-        unselectedItemColor: AppColors.textColor,
+        selectedItemColor: AppColors.color1,
+        unselectedItemColor: AppColors.black,
       ),
       colorScheme: ColorScheme.fromSeed(
-  
-          seedColor: AppColors.primaryColor, onSurface: AppColors.textColor),
+          seedColor: AppColors.color1, onSurface: AppColors.black),
       inputDecorationTheme: const InputDecorationTheme(
           fillColor: AppColors.accentColor,
           filled: true,
+          suffixIconColor: AppColors.color1,
+          prefixIconColor: AppColors.color1,
           hintStyle: TextStyle(
             fontSize: 15,
             color: AppColors.greyColor,

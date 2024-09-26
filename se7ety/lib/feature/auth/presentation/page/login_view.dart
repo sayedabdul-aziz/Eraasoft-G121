@@ -11,24 +11,23 @@ import 'package:se7ety/core/widgets/custom_button.dart';
 import 'package:se7ety/feature/auth/presentation/bloc/auth_bloc.dart';
 import 'package:se7ety/feature/auth/presentation/bloc/auth_event.dart';
 import 'package:se7ety/feature/auth/presentation/bloc/auth_state.dart';
-import 'package:se7ety/feature/auth/presentation/page/login_view.dart';
+import 'package:se7ety/feature/auth/presentation/page/register_view.dart';
 import 'package:se7ety/feature/patient/nav_bar.dart';
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key, required this.userType});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key, required this.userType});
   final UserType userType;
 
   @override
-  _RegisterViewState createState() => _RegisterViewState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _LoginViewState extends State<LoginView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _displayName = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  bool isVisible = true;
+  bool isVisable = true;
 
   String handleUserType() {
     return widget.userType == UserType.doctor ? 'دكتور' : 'مريض';
@@ -36,29 +35,30 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: const BackButton(),
-      ),
-      body: BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is RegisterLoadingState) {
-            showLoadingDialog(context);
-          } else if (state is RegisterSuccessState) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is LoginSuccessState) {
+          if (widget.userType == UserType.patient) {
             pushAndRemoveUntil(context, const PatientNavBarWidget());
-          } else if (state is AuthErrorState) {
-            Navigator.pop(context);
-            showErrorDialog(context, state.error);
+          } else {
+            // pushAndRemoveUntil(context, const PatientNavBarWidget());
           }
-        },
-        child: Center(
+        } else if (state is AuthErrorState) {
+          Navigator.pop(context);
+          showErrorDialog(context, state.error);
+        } else {
+          showLoadingDialog(context);
+        }
+      },
+      child: Scaffold(
+        body: Center(
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Padding(
                 padding: const EdgeInsets.only(right: 16, left: 16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image.asset(
                       'assets/images/logo.png',
@@ -66,27 +66,10 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                     const SizedBox(height: 20),
                     Text(
-                      'سجل حساب جديد كـ "${handleUserType()}"',
+                      'سجل دخول الان كـ "${handleUserType()}"',
                       style: getTitleStyle(),
                     ),
                     const SizedBox(height: 30),
-                    TextFormField(
-                      keyboardType: TextInputType.name,
-                      controller: _displayName,
-                      style: const TextStyle(color: AppColors.black),
-                      decoration: InputDecoration(
-                        hintText: 'الاسم',
-                        hintStyle: getbodyStyle(color: Colors.grey),
-                        prefixIcon: const Icon(Icons.person),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) return 'من فضلك ادخل الاسم';
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 25.0,
-                    ),
                     TextFormField(
                       keyboardType: TextInputType.emailAddress,
                       controller: _emailController,
@@ -95,6 +78,7 @@ class _RegisterViewState extends State<RegisterView> {
                         hintText: 'Sayed@example.com',
                         prefixIcon: Icon(Icons.email_rounded),
                       ),
+                      textInputAction: TextInputAction.next,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'من فضلك ادخل الايميل';
@@ -111,17 +95,17 @@ class _RegisterViewState extends State<RegisterView> {
                     TextFormField(
                       textAlign: TextAlign.end,
                       style: const TextStyle(color: AppColors.black),
-                      obscureText: isVisible,
+                      obscureText: isVisable,
                       keyboardType: TextInputType.visiblePassword,
                       decoration: InputDecoration(
                         hintText: '********',
                         suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
-                                isVisible = !isVisible;
+                                isVisable = !isVisable;
                               });
                             },
-                            icon: Icon((isVisible)
+                            icon: Icon((isVisable)
                                 ? Icons.remove_red_eye
                                 : Icons.visibility_off_rounded)),
                         prefixIcon: const Icon(Icons.lock),
@@ -132,19 +116,25 @@ class _RegisterViewState extends State<RegisterView> {
                         return null;
                       },
                     ),
-                    const Gap(30),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(top: 5, right: 10),
+                      child: Text(
+                        'نسيت كلمة السر ؟',
+                        style: getSmallStyle(),
+                      ),
+                    ),
+                    const Gap(20),
                     CustomButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          context.read<AuthBloc>().add(RegisterEvent(
+                          context.read<AuthBloc>().add(LoginEvent(
                                 email: _emailController.text,
                                 password: _passwordController.text,
-                                name: _displayName.text,
-                                userType: widget.userType,
                               ));
                         }
                       },
-                      text: "تسجيل حساب",
+                      text: "تسجيل الدخول",
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 30),
@@ -152,16 +142,16 @@ class _RegisterViewState extends State<RegisterView> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'لدي حساب ؟',
+                            'ليس لدي حساب ؟',
                             style: getbodyStyle(color: AppColors.black),
                           ),
                           TextButton(
                               onPressed: () {
                                 pushReplacement(context,
-                                    LoginView(userType: widget.userType));
+                                    RegisterView(userType: widget.userType));
                               },
                               child: Text(
-                                'سجل دخول',
+                                'سجل الان',
                                 style: getbodyStyle(color: AppColors.color1),
                               ))
                         ],
@@ -175,5 +165,12 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

@@ -11,7 +11,7 @@ showErrorDialog(BuildContext context, String text) {
 
 showSuccessDialog(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    backgroundColor: AppColors.primaryColor,
+    backgroundColor: AppColors.color1,
     content: Text(text),
   ));
 }
@@ -21,6 +21,14 @@ showLoadingDialog(BuildContext context) {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return Lottie.asset('assets/images/loading.json');
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              'assets/images/loading.json',
+              width: 250,
+            ),
+          ],
+        );
       });
 }

@@ -10,7 +10,7 @@ class CustomButton extends StatelessWidget {
       required this.text,
       required this.onPressed,
       this.textStyle,
-      this.color = AppColors.primaryColor,
+      this.color = AppColors.color1,
       this.radius = 12,
       this.isOutline = false});
   final double width;
@@ -32,7 +32,7 @@ class CustomButton extends StatelessWidget {
             backgroundColor: isOutline ? AppColors.white : color,
             shape: RoundedRectangleBorder(
               side: isOutline
-                  ? const BorderSide(color: AppColors.textColor)
+                  ? const BorderSide(color: AppColors.black)
                   : BorderSide.none,
               borderRadius: BorderRadius.circular(radius),
             ),
@@ -42,7 +42,7 @@ class CustomButton extends StatelessWidget {
             text,
             style: textStyle ??
                 getbodyStyle(
-                    color: isOutline ? AppColors.textColor : AppColors.white),
+                    color: isOutline ? AppColors.black : AppColors.white),
           )),
     );
   }

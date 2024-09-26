@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:se7ety/core/functions/navigation.dart';
+import 'package:se7ety/core/services/local_storage.dart';
 import 'package:se7ety/core/utils/colors.dart';
 import 'package:se7ety/core/utils/text_style.dart';
 import 'package:se7ety/core/widgets/custom_button.dart';
@@ -26,11 +27,13 @@ class _OnboardingViewState extends State<OnboardingView> {
         actions: [
           TextButton(
               onPressed: () {
+                AppLocalStorage.cacheData(
+                    key: AppLocalStorage.isOnboardingShown, value: true);
                 pushReplacement(context, const WelcomeView());
               },
               child: Text(
                 'تخطي',
-                style: getbodyStyle(color: AppColors.primaryColor),
+                style: getbodyStyle(color: AppColors.color1),
               ))
         ],
       ),
@@ -84,7 +87,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   effect: const WormEffect(
                     dotHeight: 8,
                     dotWidth: 16,
-                    activeDotColor: AppColors.primaryColor,
+                    activeDotColor: AppColors.color1,
                     dotColor: AppColors.greyColor,
                     spacing: 8,
                   ),
@@ -96,6 +99,9 @@ class _OnboardingViewState extends State<OnboardingView> {
                       width: 100,
                       text: 'هيا بنا',
                       onPressed: () {
+                        AppLocalStorage.cacheData(
+                            key: AppLocalStorage.isOnboardingShown,
+                            value: true);
                         pushReplacement(context, const WelcomeView());
                       })
               ]),

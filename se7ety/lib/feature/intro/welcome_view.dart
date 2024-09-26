@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:se7ety/core/enum/user_type_enum.dart';
 import 'package:se7ety/core/functions/navigation.dart';
 import 'package:se7ety/core/utils/colors.dart';
 import 'package:se7ety/core/utils/text_style.dart';
-import 'package:se7ety/feature/auth/presentation/page/register_view.dart';
+import 'package:se7ety/feature/auth/presentation/page/login_view.dart';
 
 class WelcomeView extends StatelessWidget {
   const WelcomeView({super.key});
@@ -55,7 +56,7 @@ class WelcomeView extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                color: AppColors.primaryColor.withOpacity(.5),
+                color: AppColors.color1.withOpacity(.5),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
@@ -78,7 +79,8 @@ class WelcomeView extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          push(context, const RegisterView(index: 0));
+                          push(context,
+                              const LoginView(userType: UserType.doctor));
                         },
                         child: Container(
                             height: 70,
@@ -88,8 +90,7 @@ class WelcomeView extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 'دكتور',
-                                style:
-                                    getTitleStyle(color: AppColors.textColor),
+                                style: getTitleStyle(color: AppColors.black),
                               ),
                             )),
                       ),
@@ -98,7 +99,8 @@ class WelcomeView extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          push(context, const RegisterView(index: 1));
+                          push(context,
+                              const LoginView(userType: UserType.patient));
                         },
                         child: Container(
                             height: 70,
@@ -108,8 +110,7 @@ class WelcomeView extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 'مريض',
-                                style:
-                                    getTitleStyle(color: AppColors.textColor),
+                                style: getTitleStyle(color: AppColors.black),
                               ),
                             )),
                       ),

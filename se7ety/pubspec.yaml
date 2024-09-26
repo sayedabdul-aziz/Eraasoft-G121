@@ -7,11 +7,15 @@ environment:
   sdk: ">=3.4.3 <4.0.0"
 
 dependencies:
+  cloud_firestore: ^4.17.0
+  firebase_auth: ^4.19.2
   firebase_core: ^2.29.0
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.6
   flutter_svg: ^2.0.10+1
   gap: ^3.0.1
+  google_nav_bar: ^5.0.6
   lottie: ^3.1.2
   shared_preferences: ^2.3.2
   smooth_page_indicator: ^1.2.0+3

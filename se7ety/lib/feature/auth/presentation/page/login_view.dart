@@ -51,6 +51,10 @@ class _LoginViewState extends State<LoginView> {
         }
       },
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.white,
+          leading: const BackButton(),
+        ),
         body: Center(
           child: SingleChildScrollView(
             child: Form(

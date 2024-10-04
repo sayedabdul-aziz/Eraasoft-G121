@@ -6,7 +6,14 @@ class AppThemes {
       fontFamily: 'cairo',
       scaffoldBackgroundColor: AppColors.white,
       appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.color1,
+        foregroundColor: AppColors.white,
+        titleTextStyle: TextStyle(
+          fontFamily: 'cairo',
+          color: AppColors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
         centerTitle: true,
       ),
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(

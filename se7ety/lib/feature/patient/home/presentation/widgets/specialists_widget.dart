@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:se7ety/core/functions/navigation.dart';
 import 'package:se7ety/core/utils/colors.dart';
 import 'package:se7ety/core/utils/text_style.dart';
 import 'package:se7ety/feature/patient/home/data/card.dart';
+import 'package:se7ety/feature/patient/home/presentation/page/specializatioin_search_view.dart';
 
 class SpecialistsBanner extends StatelessWidget {
   const SpecialistsBanner({super.key});
@@ -24,13 +26,11 @@ class SpecialistsBanner extends StatelessWidget {
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => ExploreList(
-                  //             specialization: cards[index].doctor,
-                  //           )),
-                  // );
+                  push(
+                      context,
+                      SpecializationSearchView(
+                        specialization: cards[index].specialization,
+                      ));
                 },
                 child: ItemCardWidget(
                     title: cards[index].specialization,

@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:se7ety/core/functions/navigation.dart';
 import 'package:se7ety/core/utils/colors.dart';
 import 'package:se7ety/core/utils/text_style.dart';
+import 'package:se7ety/feature/auth/data/models/doctor_model.dart';
+import 'package:se7ety/feature/patient/search/page/doctor_profile_view.dart';
 
 class DoctorCard extends StatelessWidget {
-  const DoctorCard(
-      {super.key,
-      required this.name,
-      required this.image,
-      required this.specialization,
-      required this.rating,
-      required this.onPressed});
+  const DoctorCard({
+    super.key,
+    required this.doctor,
+    this.isClickable = true,
+  });
 
-  final String name;
-  final String image;
-  final String specialization;
-  final int rating;
-  final Function()? onPressed;
+  final DoctorModel doctor;
+  final bool isClickable;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +33,11 @@ class DoctorCard extends StatelessWidget {
         ],
       ),
       child: InkWell(
-        onTap: onPressed,
+        onTap: () {
+          if (isClickable) {
+            push(context, DoctorProfile(doctorModel: doctor));
+          }
+        },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -48,7 +50,7 @@ class DoctorCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15),
                     color: AppColors.white),
                 child: Image.network(
-                  image,
+                  doctor.image ?? '',
                   height: 50,
                   width: 50,
                   fit: BoxFit.contain,
@@ -64,13 +66,13 @@ class DoctorCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    name,
+                    doctor.name ?? '',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: getTitleStyle(fontSize: 16),
                   ),
                   Text(
-                    specialization,
+                    doctor.specialization ?? '',
                     style: getbodyStyle(),
                   ),
                 ],
@@ -83,7 +85,7 @@ class DoctorCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  rating.toString(),
+                  doctor.rating.toString(),
                   style: getbodyStyle(),
                 ),
                 const SizedBox(

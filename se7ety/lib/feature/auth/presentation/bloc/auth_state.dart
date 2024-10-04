@@ -14,6 +14,12 @@ class RegisterLoadingState extends AuthState {}
 
 class RegisterSuccessState extends AuthState {}
 
+// update doctor
+
+class UpdateDoctorLoadingState extends AuthState {}
+
+class UpdateDoctorSuccessState extends AuthState {}
+
 // error
 
 class AuthErrorState extends AuthState {

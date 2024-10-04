@@ -2,25 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:se7ety/core/utils/colors.dart';
 import 'package:se7ety/core/utils/text_style.dart';
-import 'package:se7ety/feature/patient/appointments/appointments_view.dart';
-import 'package:se7ety/feature/patient/home/presentation/page/home_view.dart';
-import 'package:se7ety/feature/patient/profile/page/profile_view.dart';
-import 'package:se7ety/feature/patient/search/page/search_view.dart';
+import 'package:se7ety/feature/doctor/appointments/appointments_view.dart';
+import 'package:se7ety/feature/doctor/home/home_view.dart';
+import 'package:se7ety/feature/doctor/profile/page/profile_view.dart';
 
-class PatientNavBarWidget extends StatefulWidget {
-  const PatientNavBarWidget({super.key});
+class DoctorNavBar extends StatefulWidget {
+  const DoctorNavBar({super.key});
 
   @override
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<PatientNavBarWidget> {
+class _MainPageState extends State<DoctorNavBar> {
   int _selectedIndex = 0;
   final List _pages = [
-    const PatientHomeView(),
-    const SearchView(),
-    const MyAppointments(),
-    const PatientProfile(),
+    const DoctorHomeView(),
+    const DoctorAppointments(),
+    const DoctorProfileView(),
   ];
 
   @override
@@ -60,10 +58,6 @@ class _MainPageState extends State<PatientNavBarWidget> {
               iconSize: 28,
               icon: Icons.home,
               text: 'الرئيسية',
-            ),
-            GButton(
-              icon: Icons.search,
-              text: 'البحث',
             ),
             GButton(
               iconSize: 28,

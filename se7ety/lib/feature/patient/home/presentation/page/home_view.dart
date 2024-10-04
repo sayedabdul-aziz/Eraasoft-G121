@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:se7ety/core/functions/navigation.dart';
 import 'package:se7ety/core/utils/colors.dart';
 import 'package:se7ety/core/utils/text_style.dart';
+import 'package:se7ety/feature/patient/home/presentation/page/home_search_view.dart';
 import 'package:se7ety/feature/patient/home/presentation/widgets/specialists_widget.dart';
 import 'package:se7ety/feature/patient/home/presentation/widgets/top_rated_widget.dart';
 
@@ -108,16 +110,12 @@ class _HomePageState extends State<PatientHomeView> {
                         onPressed: () {
                           setState(
                             () {
-                              // _doctorName.text.isEmpty
-                              //     ? Container()
-                              //     : Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(
-                              //           builder: (context) => SearchHomeView(
-                              //             searchKey: _doctorName.text,
-                              //           ),
-                              //         ),
-                              //       );
+                              if (_doctorName.text.isNotEmpty) {
+                                push(
+                                    context,
+                                    SearchHomeView(
+                                        searchKey: _doctorName.text));
+                              }
                             },
                           );
                         },
@@ -128,16 +126,10 @@ class _HomePageState extends State<PatientHomeView> {
                   onFieldSubmitted: (String value) {
                     setState(
                       () {
-                        // _doctorName.text.isEmpty
-                        //     ? Container()
-                        //     : Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //           builder: (context) => SearchHomeView(
-                        //             searchKey: _doctorName.text,
-                        //           ),
-                        //         ),
-                        //       );
+                        if (_doctorName.text.isNotEmpty) {
+                          push(context,
+                              SearchHomeView(searchKey: _doctorName.text));
+                        }
                       },
                     );
                   },

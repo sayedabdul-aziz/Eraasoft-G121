@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:se7ety/core/widgets/doctor_card.dart';
+import 'package:se7ety/feature/auth/data/models/doctor_model.dart';
 
 // Collection ?
 //1) docId?
@@ -28,7 +29,10 @@ class _TopRatedListState extends State<TopRatedList> {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                value: .9,
+                color: Colors.black12,
+              ),
             );
           } else {
             return ListView.builder(
@@ -37,27 +41,15 @@ class _TopRatedListState extends State<TopRatedList> {
               shrinkWrap: true,
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                var doctor =
-                    snapshot.data!.docs[index].data() as Map<String, dynamic>;
-                  
-                if (doctor['name'] == '' || doctor['specialization'] == '') {
+                DoctorModel doctor = DoctorModel.fromJson(
+                  snapshot.data!.docs[index].data() as Map<String, dynamic>,
+                );
+                if (doctor.specialization == '') {
                   return const SizedBox();
                 }
                 return DoctorCard(
-                    name: doctor['name'],
-                    image: doctor['image'],
-                    specialization: doctor['specialization'],
-                    rating: doctor['rating'],
-                    onPressed: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => DoctorProfile(
-                      //       email: doctor['email'],
-                      //     ),
-                      //   ),
-                      // );
-                    });
+                  doctor: doctor,
+                );
               },
             );
           }

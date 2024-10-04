@@ -1,4 +1,5 @@
 import 'package:se7ety/core/enum/user_type_enum.dart';
+import 'package:se7ety/feature/auth/data/models/doctor_model.dart';
 
 class AuthEvent {}
 
@@ -20,4 +21,10 @@ class RegisterEvent extends AuthEvent {
     required this.name,
     required this.userType,
   });
+}
+
+class UpdateDoctorRegistrationEvent extends AuthEvent {
+  final DoctorModel model;
+
+  UpdateDoctorRegistrationEvent({required this.model});
 }

@@ -1,7 +1,7 @@
 import 'user.dart';
 
 class Data {
-  User? user;
+  UserModel? user;
   String? token;
 
   Data({this.user, this.token});
@@ -9,7 +9,7 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         user: json['user'] == null
             ? null
-            : User.fromJson(json['user'] as Map<String, dynamic>),
+            : UserModel.fromJson(json['user'] as Map<String, dynamic>),
         token: json['token'] as String?,
       );
 

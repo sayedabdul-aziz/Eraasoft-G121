@@ -169,4 +169,33 @@ class HomeRepo {
       return null;
     }
   }
+
+  static Future<bool> placeOrder(
+      {String? name,
+      String? email,
+      String? phone,
+      String? governorateId,
+      String? address}) async {
+    try {
+      var response =
+          await DioProvider.post(endpoint: 'place-order', queryParameters: {
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'governorate_id': governorateId,
+        'address': address
+      }, headers: {
+        "Authorization":
+            "Bearer ${AppLocalStorage.getData(key: AppLocalStorage.token)}",
+      });
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } on Exception catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
 }

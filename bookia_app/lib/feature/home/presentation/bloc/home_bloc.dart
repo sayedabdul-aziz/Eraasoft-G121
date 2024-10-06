@@ -20,6 +20,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<GetCartEvent>(getCart);
     on<AddToCartEvent>(addToCart);
     on<RemoveFromCartEvent>(removeFromCart);
+    on<PlaceOrderEvent>(placeOrder);
   }
 
   BestSellerResponseModel? bestSellerResponseModel;
@@ -165,6 +166,30 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       await HomeRepo.removeFromCart(cartId: event.cartItemId).then((value) {
         if (value) {
           emit(RemoveFromCartLoadedState());
+        } else {
+          emit(HomeErrorState());
+        }
+      });
+    } on Exception catch (e) {
+      log(e.toString());
+      emit(HomeErrorState());
+    }
+  }
+
+  Future<void> placeOrder(
+      PlaceOrderEvent event, Emitter<HomeState> emit) async {
+    emit(AddToWishlistLoadingState());
+
+    try {
+      await HomeRepo.placeOrder(
+              name: event.name,
+              email: event.email,
+              phone: event.phone,
+              governorateId: event.governorateId,
+              address: event.address)
+          .then((value) {
+        if (value) {
+          emit(AddToWishlistLoadedState());
         } else {
           emit(HomeErrorState());
         }

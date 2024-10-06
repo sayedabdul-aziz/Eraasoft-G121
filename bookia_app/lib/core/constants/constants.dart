@@ -18,4 +18,8 @@ class AppConstants {
   static const String addToCartEndpoints = '/add-to-cart';
   static const String removeFromCartEndpoints = '/remove-from-cart';
   static const String getCartEndpoints = '/cart';
+
+  // profile
+  static const String getProfileEndpoints = '/profile';
+  static const String updateProfileEndpoints = '/update-profile';
 }

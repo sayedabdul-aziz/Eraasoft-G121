@@ -17,17 +17,22 @@ class DioProvider {
     return dio.get(endpoint, options: Options(headers: headers));
   }
 
-  static Future<Response> post(
-      {required String endpoint,
-      Map<String, dynamic>? data,
-      Map<String, dynamic>? headers}) {
-    return dio.post(endpoint, data: data, options: Options(headers: headers));
+  static Future<Response> post({
+    required String endpoint,
+    Object? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  }) {
+    return dio.post(
+      endpoint,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(headers: headers),
+    );
   }
 
   static Future<Response> put(
-      {required String endpoint,
-      Map<String, dynamic>? data,
-      Map<String, dynamic>? headers}) {
+      {required String endpoint, Object? data, Map<String, dynamic>? headers}) {
     return dio.put(endpoint, data: data, options: Options(headers: headers));
   }
 

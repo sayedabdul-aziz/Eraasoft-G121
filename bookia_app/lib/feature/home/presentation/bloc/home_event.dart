@@ -34,3 +34,19 @@ class RemoveFromCartEvent extends HomeEvent {
 
   RemoveFromCartEvent({required this.cartItemId});
 }
+
+class PlaceOrderEvent extends HomeEvent {
+  String? name;
+  String? phone;
+  String? email;
+  String? governorateId;
+  String? address;
+
+  PlaceOrderEvent({
+    this.name,
+    this.phone,
+    this.email,
+    this.governorateId,
+    this.address,
+  });
+}

@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeBannerWidget extends StatefulWidget {
@@ -28,11 +29,12 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
       buildWhen: (previous, current) =>
           current is HomeBannerLoadedState || current is HomeBannerLoadingState,
       builder: (context, state) {
-        if (state is HomeBannerLoadedState) {
-          var banner = context.read<HomeBloc>().homeBannerResponseModel?.data;
-          return Column(
-            children: [
-              CarouselSlider.builder(
+        var banner = context.read<HomeBloc>().homeBannerResponseModel?.data;
+        return Column(
+          children: [
+            Skeletonizer(
+              enabled: state is HomeBannerLoadingState,
+              child: CarouselSlider.builder(
                   itemCount: banner?.sliders?.length ?? 0,
                   itemBuilder: (BuildContext context, int itemIndex,
                           int pageViewIndex) =>
@@ -45,6 +47,11 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
                               height: 150,
                               width: double.infinity,
                               fit: BoxFit.cover,
+                              errorWidget: (context, url, error) => Container(
+                                color: AppColors.primaryColor,
+                                width: double.infinity,
+                                height: 150,
+                              ),
                             ),
                           )
                         ],
@@ -62,24 +69,22 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
                     },
                     scrollDirection: Axis.horizontal,
                   )),
-              const Gap(16),
-              SmoothPageIndicator(
-                  controller: PageController(initialPage: selectedBanner),
-                  count: 4,
-                  effect: const ExpandingDotsEffect(
-                      dotHeight: 7,
-                      expansionFactor: 7,
-                      radius: 7,
-                      dotWidth: 7,
-                      dotColor: AppColors.borderColor,
-                      activeDotColor:
-                          AppColors.primaryColor), // your preferred effect
-                  onDotClicked: (index) {}),
-            ],
-          );
-        } else {
-          return const SizedBox();
-        }
+            ),
+            const Gap(16),
+            SmoothPageIndicator(
+                controller: PageController(initialPage: selectedBanner),
+                count: 4,
+                effect: const ExpandingDotsEffect(
+                    dotHeight: 7,
+                    expansionFactor: 7,
+                    radius: 7,
+                    dotWidth: 7,
+                    dotColor: AppColors.borderColor,
+                    activeDotColor:
+                        AppColors.primaryColor), // your preferred effect
+                onDotClicked: (index) {}),
+          ],
+        );
       },
     );
   }

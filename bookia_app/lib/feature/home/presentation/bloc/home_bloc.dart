@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:bookia_app/feature/home/data/models/response/best_seller_response_model/best_seller_response_model.dart';
 import 'package:bookia_app/feature/home/data/models/response/get_cart_response_model/get_cart_response_model.dart';
-import 'package:bookia_app/feature/home/data/models/response/get_wishlist_response_model/get_wishlist_response_model.dart';
+import 'package:bookia_app/feature/home/data/models/response/get_wishlist_response/get_wishlist_response.dart';
 import 'package:bookia_app/feature/home/data/models/response/home_banner_response_model/home_banner_response_model.dart';
 import 'package:bookia_app/feature/home/data/repo/home_repo.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,18 +14,19 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
     on<GetBestSellerEvent>(getBestSellerBooks);
     on<GetHomeBannerEvent>(getHomeBanner);
-    on<AddToWishlistEvent>(addToWishlist);
     on<GetWishlistEvent>(getWishlist);
+    on<AddToWishlistEvent>(addToWishlist);
     on<RemoveFromWishlistEvent>(removeFromWishlist);
     on<GetCartEvent>(getCart);
     on<AddToCartEvent>(addToCart);
     on<RemoveFromCartEvent>(removeFromCart);
+    on<UpdateCartItemEvent>(updateCartItem);
     on<PlaceOrderEvent>(placeOrder);
   }
 
   BestSellerResponseModel? bestSellerResponseModel;
   HomeBannerResponseModel? homeBannerResponseModel;
-  GetWishlistResponseModel? getWishlistResponseModel;
+  GetWishlistResponse? getWishlistResponse;
   GetCartResponseModel? getCartResponseModel;
 
   Future<void> getBestSellerBooks(
@@ -69,11 +70,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> getWishlist(
       GetWishlistEvent event, Emitter<HomeState> emit) async {
     emit(GetWishlistLoadingState());
-
     try {
       await HomeRepo.getWishlist().then((value) {
         if (value != null) {
-          getWishlistResponseModel = value;
+          getWishlistResponse = value;
           emit(GetWishlistLoadedState());
         } else {
           emit(HomeErrorState());
@@ -88,10 +88,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> addToWishlist(
       AddToWishlistEvent event, Emitter<HomeState> emit) async {
     emit(AddToWishlistLoadingState());
-
     try {
       await HomeRepo.addToWishlist(productId: event.productId).then((value) {
         if (value) {
+          log('added to wishlist');
           emit(AddToWishlistLoadedState());
         } else {
           emit(HomeErrorState());
@@ -106,7 +106,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> removeFromWishlist(
       RemoveFromWishlistEvent event, Emitter<HomeState> emit) async {
     emit(RemoveFromWishlistLoadingState());
-
     try {
       await HomeRepo.removeFromWishlist(productId: event.productId)
           .then((value) {
@@ -122,10 +121,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     }
   }
 
-  // cart
   Future<void> getCart(GetCartEvent event, Emitter<HomeState> emit) async {
     emit(GetCartLoadingState());
-
     try {
       await HomeRepo.getCart().then((value) {
         if (value != null) {
@@ -143,7 +140,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> addToCart(AddToCartEvent event, Emitter<HomeState> emit) async {
     emit(AddToCartLoadingState());
-
     try {
       await HomeRepo.addToCart(productId: event.productId).then((value) {
         if (value) {
@@ -161,11 +157,29 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> removeFromCart(
       RemoveFromCartEvent event, Emitter<HomeState> emit) async {
     emit(RemoveFromCartLoadingState());
-
     try {
-      await HomeRepo.removeFromCart(cartId: event.cartItemId).then((value) {
+      await HomeRepo.removeFromCart(cartItemId: event.cartItemId).then((value) {
         if (value) {
           emit(RemoveFromCartLoadedState());
+        } else {
+          emit(HomeErrorState());
+        }
+      });
+    } on Exception catch (e) {
+      log(e.toString());
+      emit(HomeErrorState());
+    }
+  }
+
+  Future<void> updateCartItem(
+      UpdateCartItemEvent event, Emitter<HomeState> emit) async {
+    emit(UpdateCartItemLoadingState());
+    try {
+      await HomeRepo.updateCartItem(
+              cartItemId: event.cartItemId, quantity: event.quantity)
+          .then((value) {
+        if (value) {
+          emit(UpdateCartItemLoadedState());
         } else {
           emit(HomeErrorState());
         }

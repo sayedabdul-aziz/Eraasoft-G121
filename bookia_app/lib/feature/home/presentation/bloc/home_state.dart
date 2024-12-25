@@ -41,11 +41,14 @@ class RemoveFromCartLoadingState extends HomeState {}
 
 class RemoveFromCartLoadedState extends HomeState {}
 
+class UpdateCartItemLoadingState extends HomeState {}
+
+class UpdateCartItemLoadedState extends HomeState {}
+
 // checkout
 
 class CheckoutLoadingState extends HomeState {}
 
 class CheckoutLoadedState extends HomeState {}
-
 
 class HomeErrorState extends HomeState {}

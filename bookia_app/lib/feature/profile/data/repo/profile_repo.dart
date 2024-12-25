@@ -39,7 +39,7 @@ class ProfileRepo {
               'image': await MultipartFile.fromFile(model.image!,
                   filename: model.image?.split('/').last),
             'phone': model.phone,
-            'address': model.address
+            'address': model.address,
           }),
           headers: {
             "Authorization":

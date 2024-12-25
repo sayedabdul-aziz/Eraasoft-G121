@@ -2,6 +2,7 @@ import 'package:bookia_app/core/functions/navigation.dart';
 import 'package:bookia_app/core/utils/colors.dart';
 import 'package:bookia_app/core/utils/text_style.dart';
 import 'package:bookia_app/feature/profile/presentation/bloc/profile_bloc.dart';
+import 'package:bookia_app/feature/profile/presentation/bloc/profile_event.dart';
 import 'package:bookia_app/feature/profile/presentation/bloc/profile_state.dart';
 import 'package:bookia_app/feature/profile/presentation/page/edit_profile_view.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProfileBloc(),
+      create: (context) => ProfileBloc()..add(GetProfileEvent()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Profile'),

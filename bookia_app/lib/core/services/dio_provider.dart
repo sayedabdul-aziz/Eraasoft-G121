@@ -14,7 +14,10 @@ class DioProvider {
 
   static Future<Response> get(
       {required String endpoint, Map<String, dynamic>? headers}) {
-    return dio.get(endpoint, options: Options(headers: headers));
+    return dio.get(endpoint,
+        options: Options(
+          headers: headers,
+        ));
   }
 
   static Future<Response> post({

@@ -27,7 +27,7 @@ class BookDetailsView extends StatelessWidget {
                 onTap: () {
                   context
                       .read<HomeBloc>()
-                      .add(AddToWishlistEvent(productId: product?.id ?? 0));
+                      .add(AddToWishlistEvent(product?.id ?? 0));
                 },
                 child: SvgPicture.asset('assets/icons/Bookmark.svg')),
             const Gap(8),
@@ -35,83 +35,94 @@ class BookDetailsView extends StatelessWidget {
         ),
       ),
       body: BlocListener<HomeBloc, HomeState>(
-        listener: (context, state) {
-          if (state is AddToWishlistLoadedState) {
-            Navigator.pop(context);
-            showSuccessDialog(context, 'Book added to wishlist');
-          } else if (state is AddToCartLoadedState) {
-            Navigator.pop(context);
-            showSuccessDialog(context, 'Book added to cart');
-          } else if (state is AddToWishlistLoadingState ||
-              state is AddToCartLoadingState) {
-            showLoadingDialog(context);
-          } else {
-            Navigator.pop(context);
-            showErrorDialog(context, 'Something went wrong');
-          }
-        },
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(children: [
-                      const Gap(30),
-                      Hero(
-                        tag: product?.id ?? '',
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: CachedNetworkImage(
-                            imageUrl: product?.image ?? '',
-                            width: 180,
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
-                        ),
+        listener: blocListener,
+        child: DetailsContent(product: product),
+      ),
+    );
+  }
+
+  void blocListener(context, state) {
+    if (state is AddToWishlistLoadingState || state is AddToCartLoadingState) {
+      showLoadingDialog(context);
+    } else if (state is AddToWishlistLoadedState) {
+      Navigator.pop(context);
+      showSuccessDialog(context, 'Added to wishlist');
+    } else if (state is AddToCartLoadedState) {
+      Navigator.pop(context);
+      showSuccessDialog(context, 'Added to cart');
+    }
+  }
+}
+
+class DetailsContent extends StatelessWidget {
+  const DetailsContent({
+    super.key,
+    required this.product,
+  });
+
+  final Product? product;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  const Gap(30),
+                  Hero(
+                    tag: product?.id ?? '',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        imageUrl: product?.image ?? '',
+                        width: 180,
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
-                      const Gap(16),
-                      Text(
-                        product?.name ?? '',
-                        style: getHeadlineTextStyle(context),
-                      ),
-                      const Gap(16),
-                      Text(
-                        product?.category ?? '',
-                        style: getBodyTextStyle(context,
-                            color: AppColors.primaryColor),
-                      ),
-                      const Gap(16),
-                      Text(
-                        'Lorem ipsum sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                        textAlign: TextAlign.justify,
-                        style: getBodyTextStyle(context),
-                      ),
-                    ]),
-                  ),
-                ),
-                const Gap(10),
-                Row(children: [
-                  Text('\$${product?.price}',
-                      style: getHeadlineTextStyle(context)),
-                  const Gap(50),
-                  Expanded(
-                    child: CustomButton(
-                      text: 'Add to cart',
-                      color: AppColors.textColor,
-                      onTap: () {
-                        context
-                            .read<HomeBloc>()
-                            .add(AddToCartEvent(productId: product?.id ?? 0));
-                      },
                     ),
                   ),
+                  const Gap(16),
+                  Text(
+                    product?.name ?? '',
+                    style: getHeadlineTextStyle(context),
+                  ),
+                  const Gap(16),
+                  Text(
+                    product?.category ?? '',
+                    style: getBodyTextStyle(context,
+                        color: AppColors.primaryColor),
+                  ),
+                  const Gap(16),
+                  Text(
+                    'Lorem  sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                    textAlign: TextAlign.justify,
+                    style: getBodyTextStyle(context),
+                  ),
                 ]),
-              ],
+              ),
             ),
-          ),
+            const Gap(10),
+            Row(children: [
+              Text('\$${product?.price}', style: getHeadlineTextStyle(context)),
+              const Gap(50),
+              Expanded(
+                child: CustomButton(
+                  text: 'Add to cart',
+                  color: AppColors.textColor,
+                  onTap: () {
+                    context
+                        .read<HomeBloc>()
+                        .add(AddToCartEvent(productId: product?.id ?? 0));
+                  },
+                ),
+              ),
+            ]),
+          ],
         ),
       ),
     );

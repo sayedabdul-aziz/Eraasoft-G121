@@ -160,7 +160,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     ),
                     const Gap(15),
                     Container(
-                      height: 70,
+                      height: 60,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),

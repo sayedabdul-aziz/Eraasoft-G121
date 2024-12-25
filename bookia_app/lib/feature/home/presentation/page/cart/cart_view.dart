@@ -2,7 +2,8 @@ import 'package:bookia_app/core/functions/dialogs.dart';
 import 'package:bookia_app/core/utils/colors.dart';
 import 'package:bookia_app/core/utils/text_style.dart';
 import 'package:bookia_app/feature/home/presentation/bloc/home_bloc.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bookia_app/feature/home/presentation/page/cart/widgets/cart_item.dart';
+import 'package:bookia_app/feature/home/presentation/page/cart/widgets/checkout_footer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -25,133 +26,96 @@ class _CartViewState extends State<CartView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Cart',
-          style: getTitleTextStyle(context),
+        title: const Text('Cart'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: BlocConsumer<HomeBloc, HomeState>(
+          listener: blocListener,
+          builder: blocBuilder,
         ),
       ),
-      body: BlocConsumer<HomeBloc, HomeState>(
-        listener: (context, state) {
-          if (state is RemoveFromCartLoadedState) {
-            Navigator.pop(context);
-            context.read<HomeBloc>().add(GetCartEvent());
-          } else if (state is RemoveFromCartLoadingState ||
-              state is GetCartLoadingState) {
-            showLoadingDialog(context);
-          } else if (state is GetCartLoadedState) {
-            Navigator.pop(context);
-          }
-        },
-        buildWhen: (previous, current) => current is GetCartLoadedState,
-        builder: (context, state) {
-          var cartList =
-              context.read<HomeBloc>().getCartResponseModel?.data?.cartItems;
-          if (cartList?.isEmpty ?? false) {
-            return Center(
-                child: Column(
+    );
+  }
+
+  void blocListener(BuildContext context, HomeState state) {
+    if (state is RemoveFromCartLoadingState ||
+        state is GetCartLoadingState ||
+        state is UpdateCartItemLoadingState) {
+      showLoadingDialog(context);
+    } else if (state is GetCartLoadedState) {
+      Navigator.pop(context);
+    } else if (state is RemoveFromCartLoadedState) {
+      Navigator.pop(context);
+      showSuccessDialog(context, 'Removed from cart');
+      context.read<HomeBloc>().add(GetCartEvent());
+    } else if (state is UpdateCartItemLoadedState) {
+      Navigator.pop(context);
+      context.read<HomeBloc>().add(GetCartEvent());
+    }
+  }
+
+  Widget blocBuilder(BuildContext context, HomeState state) {
+    var books = context.read<HomeBloc>().getCartResponseModel?.data?.cartItems;
+    return books?.isEmpty ?? true
+        ? Center(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(
-                  Icons.hourglass_empty_rounded,
-                  size: 100,
+                  Icons.shopping_cart_outlined,
+                  size: 50,
                   color: AppColors.primaryColor,
                 ),
-                const Gap(20),
-                Text('No books in wishlist',
-                    style: getBodyTextStyle(
-                      context,
-                    )),
+                const Gap(10),
+                Text(
+                  'No books in Your Cart',
+                  style: getSmallTextStyle(context),
+                )
               ],
-            ));
-          }
-          return Padding(
-            padding: const EdgeInsets.all(20),
-            child: ListView.separated(
-              itemCount: cartList?.length ?? 0,
-              separatorBuilder: (BuildContext context, int index) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Divider(),
-                );
-              },
-              itemBuilder: (BuildContext context, int index) {
-                return Row(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: CachedNetworkImage(
-                        imageUrl: cartList?[index].itemProductImage ?? '',
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 110,
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
-                    ),
-                    const Gap(10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                  child: Text(
-                                cartList?[index].itemProductName ?? '',
-                                style: getBodyTextStyle(context),
-                              )),
-                              IconButton.outlined(
-                                  constraints: const BoxConstraints(
-                                      maxHeight: 24, maxWidth: 24),
-                                  style: IconButton.styleFrom(),
-                                  padding: const EdgeInsets.all(3),
-                                  onPressed: () {
-                                    context.read<HomeBloc>().add(
-                                        RemoveFromCartEvent(
-                                            cartItemId:
-                                                cartList?[index].itemId ?? 0));
-                                  },
-                                  icon: const Icon(Icons.close, size: 16)),
-                            ],
-                          ),
-                          Text(
-                            '\$${cartList?[index].itemTotal?.toStringAsFixed(2)}',
-                            style: getBodyTextStyle(context, fontSize: 16),
-                          ),
-                          const Gap(10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              FloatingActionButton.small(
-                                backgroundColor: AppColors.borderColor,
-                                elevation: 0,
-                                onPressed: () {},
-                                child: const Icon(Icons.remove),
-                              ),
-                              const Gap(10),
-                              Text(
-                                cartList?[index].itemQuantity.toString() ?? '',
-                                style: getBodyTextStyle(context),
-                              ),
-                              const Gap(10),
-                              FloatingActionButton.small(
-                                backgroundColor: AppColors.borderColor,
-                                elevation: 0,
-                                onPressed: () {},
-                                child: const Icon(Icons.add),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                );
-              },
             ),
+          )
+        : Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      return CartItemWidget(
+                          book: books?[index],
+                          onRemoveClicked: () {
+                            context.read<HomeBloc>().add(RemoveFromCartEvent(
+                                cartItemId: books?[index].itemId ?? 0));
+                          },
+                          onAddClicked: () {
+                            if ((books?[index].itemQuantity ?? 0) <
+                                (books?[index].itemProductStock ?? 0)) {
+                              context.read<HomeBloc>().add(UpdateCartItemEvent(
+                                  cartItemId: books?[index].itemId ?? 0,
+                                  quantity:
+                                      (books?[index].itemQuantity ?? 0) + 1));
+                            }
+                          },
+                          onMinusClicked: () {
+                            if (books?[index].itemQuantity != 1) {
+                              context.read<HomeBloc>().add(UpdateCartItemEvent(
+                                  cartItemId: books?[index].itemId ?? 0,
+                                  quantity:
+                                      (books?[index].itemQuantity ?? 0) - 1));
+                            }
+                          });
+                    },
+                    separatorBuilder: (context, index) => const Divider(
+                          height: 40,
+                        ),
+                    itemCount: books?.length ?? 0),
+              ),
+              CheckoutFooter(
+                  total: context
+                      .read<HomeBloc>()
+                      .getCartResponseModel
+                      ?.data
+                      ?.total)
+            ],
           );
-        },
-      ),
-    );
   }
 }

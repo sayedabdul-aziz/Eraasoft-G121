@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class NavBarWidget extends StatefulWidget {
-  const NavBarWidget({super.key});
+  const NavBarWidget({super.key, this.preSelectedIndex});
+  final int? preSelectedIndex;
 
   @override
   State<NavBarWidget> createState() => _NavBarWidgetState();
@@ -16,6 +17,11 @@ class NavBarWidget extends StatefulWidget {
 
 class _NavBarWidgetState extends State<NavBarWidget> {
   int selectedIndex = 0;
+  @override
+  void initState() {
+    super.initState();
+    selectedIndex = widget.preSelectedIndex ?? 0;
+  }
 
   List<Widget> pages = const [
     HomeView(),
